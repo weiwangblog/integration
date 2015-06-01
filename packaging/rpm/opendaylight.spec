@@ -46,16 +46,27 @@ OpenDaylight Helium SR3 (0.2.3)
 mkdir -p $RPM_BUILD_ROOT/opt/%name
 # Move ODL from archive to its dir in build root
 cp -r ../distribution-karaf-0.2.3-Helium-SR3/* $RPM_BUILD_ROOT/opt/%name
+#
+# Wei: here add the boot service
+#
+
 # Create directory in build root for systemd .service file
 mkdir -p $RPM_BUILD_ROOT/%{_unitdir}
 # Move ODL's systemd .service file to correct dir in build root
 cp ../../BUILD/opendaylight-systemd-%{commit}/opendaylight.service $RPM_BUILD_ROOT/%{_unitdir}
+
+
+%post
+cp $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg.org
+sed -i s/^featuresBoot=/featuresBoot=config,standard,region,package,kar,ssh,management,dl-restconf,odl-l2switch-switch,odl-mdsal-apidocs,odl-dlux-core,odl-mdsal-all,odl-openflowplugin-flow-services-ui/ $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg
+
 
 %postun
 # When the RPM is removed, the subdirs containing new files wouldn't normally
 #   be deleted. Manually clean them up.
 #   Warning: This does assume there's no data there that should be persevered
 rm -rf $RPM_BUILD_ROOT/opt/%name
+
 
 %files
 # ODL will run as odl:odl, set as user:group for ODL dir, dont override mode
@@ -65,6 +76,8 @@ rm -rf $RPM_BUILD_ROOT/opt/%name
 
 
 %changelog
+* Mon Jun 1  2015 Wei Wang       <wei.wang@riftio.com> - 0.2.3-3
+- Added boot features, auto start service
 * Thu Apr 16 2015 Daniel Farrell <dfarrell@redhat.com> - 0.2.3-2
 - Force Java version 1.7
 * Mon Mar 23 2015 Daniel Farrell <dfarrell@redhat.com> - 0.2.3-1
