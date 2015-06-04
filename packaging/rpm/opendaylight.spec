@@ -7,7 +7,7 @@
 
 Name:       opendaylight
 Version:    0.2.3
-Release:    2%{?dist}
+Release:    4%{?dist}
 Summary:    OpenDaylight SDN Controller
 
 Group:      Applications/Communications
@@ -59,6 +59,8 @@ cp ../../BUILD/opendaylight-systemd-%{commit}/opendaylight.service $RPM_BUILD_RO
 %post
 cp $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg.org
 sed -i s/^featuresBoot=/featuresBoot=config,standard,region,package,kar,ssh,management,dl-restconf,odl-l2switch-switch,odl-mdsal-apidocs,odl-dlux-core,odl-mdsal-all,odl-openflowplugin-flow-services-ui/ $RPM_BUILD_ROOT/opt/%name/etc/org.apache.karaf.features.cfg
+cp $RPM_BUILD_ROOT/opt/%name/system/org/opendaylight/l2switch/arphandler/arphandler-config/0.1.3-Helium-SR3/arphandler-config-0.1.3-Helium-SR3-config.xml $RPM_BUILD_ROOT/opt/%name/system/org/opendaylight/l2switch/arphandler/arphandler-config/0.1.3-Helium-SR3/arphandler-config-0.1.3-Helium-SR3-config.xml.org
+sed -i s/proactive-flood-mode\>true/proactive-flood-mode\>false/ $RPM_BUILD_ROOT/opt/%name/system/org/opendaylight/l2switch/arphandler/arphandler-config/0.1.3-Helium-SR3/arphandler-config-0.1.3-Helium-SR3-config.xml
 
 
 %postun
@@ -76,6 +78,8 @@ rm -rf $RPM_BUILD_ROOT/opt/%name
 
 
 %changelog
+* Thu Jun 4  2015 Wei Wang       <wei.wang@riftio.com> - 0.2.3-4
+- Added boot features, auto start service
 * Mon Jun 1  2015 Wei Wang       <wei.wang@riftio.com> - 0.2.3-3
 - Added boot features, auto start service
 * Thu Apr 16 2015 Daniel Farrell <dfarrell@redhat.com> - 0.2.3-2
