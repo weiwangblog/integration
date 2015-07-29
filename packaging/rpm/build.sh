@@ -2,7 +2,7 @@
 
 # Common paths used in this script
 # NB: Name will need to be updated for both ODL and RMP version bumps
-version=4
+version=5
 HOME=/net/tau/localdisk/wwang/
 rpm_name="opendaylight-0.2.3-$version.noarch.rpm"
 rpm_out_path="$HOME/rpmbuild/RPMS/noarch/opendaylight-0.2.3-$version.fc20.noarch.rpm"
